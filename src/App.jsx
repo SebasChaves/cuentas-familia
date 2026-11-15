@@ -16,6 +16,7 @@ import Home from './components/Home';
 import History from './components/History';
 import Settings from './components/Settings';
 import AddSheet from './components/AddSheet';
+import Splash from './components/Splash';
 import { IconHome, IconList, IconPlus, IconUser, IconWifiOff } from './components/Icons';
 
 const TUTORIAL_KEY = 'cf-tutorial-visto';
@@ -45,6 +46,14 @@ export default function App() {
   const [sheet, setSheet] = useState(null); // null | {} | prefill
   const [toast, setToast] = useState('');
   const online = useOnline();
+  // La pantalla de carga se muestra al menos un momento para que la animación no parpadee
+  const [minTimeDone, setMinTimeDone] = useState(false);
+  const [splashGone, setSplashGone] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setMinTimeDone(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => watchAuth((u) => setUser(u || null)), []);
 
@@ -74,17 +83,42 @@ export default function App() {
     [group, movements],
   );
 
+  const loadingNow =
+    !showTutorial && (user === undefined || (user && groupId === undefined) || (groupId && !group));
+  useEffect(() => {
+    if (!minTimeDone || loadingNow || splashGone) return;
+    const t = setTimeout(() => setSplashGone(true), 350); // duración del fundido
+    return () => clearTimeout(t);
+  }, [minTimeDone, loadingNow, splashGone]);
+
   const finishTutorial = () => {
     localStorage.setItem(TUTORIAL_KEY, '1');
     setShowTutorial(false);
   };
 
-  if (showTutorial) return <Tutorial onDone={finishTutorial} />;
-  if (user === undefined) return <div className="center-screen" aria-busy="true" />;
-  if (!user) return <Login />;
-  if (groupId === undefined) return <div className="center-screen" aria-busy="true" />;
-  if (!groupId) return <GroupSetup user={user} />;
-  if (!group) return <div className="center-screen" aria-busy="true" />;
+  const loading = loadingNow;
+  const hideSplash = minTimeDone && !loading;
+  const splash = (!splashGone || loading) && <Splash leaving={hideSplash} />;
+
+  if (showTutorial) return (
+    <>
+      <Tutorial onDone={finishTutorial} />
+      {splash}
+    </>
+  );
+  if (loading) return splash;
+  if (!user) return (
+    <>
+      <Login />
+      {splash}
+    </>
+  );
+  if (!groupId) return (
+    <>
+      <GroupSetup user={user} />
+      {splash}
+    </>
+  );
 
   const names = Object.fromEntries(
     group.memberUids.map((u) => [u, group.members?.[u]?.name || 'Alguien']),
@@ -154,6 +188,7 @@ export default function App() {
           {toast}
         </div>
       )}
+      {splash}
     </>
   );
 }

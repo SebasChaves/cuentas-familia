@@ -243,7 +243,7 @@ export default function AddSheet({ user, group, names, prefill, onClose, onSave 
           </p>
         )}
 
-        <button type="submit" className="btn btn-primary btn-block" disabled={!amount}>
+        <button type="submit" className="btn btn-primary btn-block btn-save" disabled={!amount}>
           Guardar
         </button>
       </form>

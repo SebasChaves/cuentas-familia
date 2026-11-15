@@ -182,3 +182,17 @@ body.sheet-open { overflow: hidden; }
 /* iOS: el campo de fecha ignora width:100% y se desborda hacia los lados */
 input[type='date'] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; line-height: 46px; }
 input[type='date']::-webkit-date-and-time-value { text-align: left; margin: 0; }
+
+/* La hoja es una columna con alto máximo: sin esto el navegador aplasta los hijos (y el botón) */
+.sheet > * { flex-shrink: 0; }
+/* Botón de guardar grande y siempre visible al final de la hoja */
+.btn-save {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  height: 60px;
+  border-radius: 16px;
+  font-size: 17px;
+  box-shadow: 0 -16px 20px 4px var(--surface);
+}
+.btn-save:disabled { opacity: 1; background: #1f4f4a; border-color: #1f4f4a; color: #9ca3af; }
