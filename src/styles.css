@@ -20,7 +20,7 @@
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+html, body { margin: 0; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; background: var(--bg); color: var(--text); font-family: var(--body); -webkit-font-smoothing: antialiased; }
 body { min-height: 100dvh; }
 button, input, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
@@ -118,9 +118,9 @@ h2.title { font-family: var(--display); font-size: 24px; font-weight: 700; }
 .nav-add button { width: 56px; height: 56px; border-radius: 18px; background: var(--pos); color: var(--pos-ink); border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(45, 212, 191, 0.25); }
 
 /* ---------- Hoja inferior (agregar) ---------- */
-.sheet-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 20; display: flex; align-items: flex-end; justify-content: center; animation: fade 0.2s ease; }
+.sheet-backdrop { position: fixed; inset: 0; overscroll-behavior: contain; background: rgba(0, 0, 0, 0.6); z-index: 20; display: flex; align-items: flex-end; justify-content: center; animation: fade 0.2s ease; }
 .sheet {
-  width: 100%; max-width: 480px; max-height: 94dvh; overflow-y: auto;
+  width: 100%; max-width: 480px; max-height: 94dvh; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   background: var(--surface); border-top: 1px solid var(--border-2); border-radius: 28px 28px 0 0;
   padding: 12px 20px calc(24px + env(safe-area-inset-bottom));
   display: flex; flex-direction: column; gap: 20px; animation: up 0.25s ease;
@@ -134,9 +134,9 @@ h2.title { font-family: var(--display); font-size: 24px; font-weight: 700; }
 .segmented button[aria-pressed='true'] { background: var(--border-2); color: var(--text); font-weight: 600; }
 
 .amount-input { background: transparent; border: none; border-bottom: 2px solid var(--pos); font-family: var(--display); font-size: 44px; font-weight: 700; letter-spacing: -1px; padding: 4px 0; width: 100%; outline: none; }
-.field { height: 48px; background: var(--bg); border: 1px solid var(--border-2); border-radius: 12px; padding: 0 14px; font-size: 15px; width: 100%; }
+.field { height: 48px; background: var(--bg); border: 1px solid var(--border-2); border-radius: 12px; padding: 0 14px; font-size: 16px; width: 100%; min-width: 0; }
 .field:focus { border-color: var(--pos); outline: none; }
-.field-sm { height: 40px; width: 120px; text-align: right; font-family: var(--display); }
+.field-sm { height: 40px; width: 120px; flex: none; text-align: right; font-family: var(--display); }
 
 .people { display: flex; gap: 14px; flex-wrap: wrap; }
 .person { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; color: var(--muted); font-size: 13px; padding: 0; min-width: 56px; }
@@ -174,3 +174,11 @@ h2.title { font-family: var(--display); font-size: 24px; font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* iOS hace zoom al enfocar campos con letra < 16px: todos los campos usan 16px como mínimo */
+input, select, textarea { font-size: max(16px, 1em); }
+.sheet { touch-action: pan-y; }
+body.sheet-open { overflow: hidden; }
+/* iOS: el campo de fecha ignora width:100% y se desborda hacia los lados */
+input[type='date'] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; line-height: 46px; }
+input[type='date']::-webkit-date-and-time-value { text-align: left; margin: 0; }

@@ -54,8 +54,16 @@ export default function AddSheet({ user, group, names, prefill, onClose, onSave 
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
 
+  // Bloquea el scroll de la página de atrás mientras la hoja está abierta
   useEffect(() => {
-    if (!prefill.amount) amountRef.current?.focus();
+    document.body.classList.add('sheet-open');
+    return () => document.body.classList.remove('sheet-open');
+  }, []);
+
+  useEffect(() => {
+    // En compu enfoca el monto; en celular no, para que el teclado no salte y mueva la hoja
+    const finePointer = window.matchMedia?.('(pointer: fine)').matches;
+    if (!prefill.amount && finePointer) amountRef.current?.focus({ preventScroll: true });
     const onKey = (e) => e.key === 'Escape' && closeRef.current();
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
