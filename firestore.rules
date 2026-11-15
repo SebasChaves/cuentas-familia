@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isMember(groupId) {
+      return signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/groups/$(groupId)).data.memberUids;
+    }
+
+    // Cada usuario solo ve y edita su propio perfil (a qué familia pertenece).
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /groups/{groupId} {
+      // El id del grupo funciona como código de invitación: se puede leer por id
+      // (para unirse), pero no se pueden listar los grupos.
+      allow get: if signedIn();
+      allow list: if false;
+
+      allow create: if signedIn() && request.resource.data.memberUids == [request.auth.uid];
+
+      // Un miembro puede editar (p. ej. nombres) sin cambiar la lista de miembros.
+      // Alguien con el código se puede unir agregándose solo a sí mismo.
+      allow update: if
+        (signedIn() && request.auth.uid in resource.data.memberUids
+          && request.resource.data.memberUids == resource.data.memberUids)
+        || (signedIn() && !(request.auth.uid in resource.data.memberUids)
+          && request.resource.data.memberUids == resource.data.memberUids.concat([request.auth.uid]));
+
+      allow delete: if false;
+
+      match /movements/{movementId} {
+        allow read, delete: if isMember(groupId);
+        allow create, update: if isMember(groupId)
+          && request.resource.data.amount is int
+          && request.resource.data.amount > 0
+          && request.resource.data.type in ['expense', 'loan', 'payment'];
+      }
+    }
+  }
+}
