@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { renameMember, signOut, resetDemo, isDemo } from '../data';
 import { IconCopy, IconShare, IconHelp, IconLogout } from './Icons';
+import { APP_VERSION } from '../update';
 
 export default function Settings({ user, group, names, onTutorial, notify }) {
   const [name, setName] = useState(names[user.uid] || '');
@@ -106,6 +107,8 @@ export default function Settings({ user, group, names, onTutorial, notify }) {
           <IconLogout size={18} /> Cerrar sesión
         </button>
       </section>
+
+      <p className="muted" style={{ textAlign: 'center', fontSize: 13 }}>Cuentas·Fam v{APP_VERSION}</p>
     </>
   );
 }

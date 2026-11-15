@@ -198,3 +198,28 @@ input[type='date']::-webkit-date-and-time-value { text-align: left; margin: 0; }
   box-shadow: 0 -16px 20px 4px var(--surface);
 }
 .btn-save:disabled { opacity: 1; background: #1f4f4a; border-color: #1f4f4a; color: #9ca3af; }
+
+/* ---------- Aviso de versión nueva ---------- */
+.update-card {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(76px + var(--safe-b));
+  z-index: 40;
+  max-width: 456px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  animation: up 0.3s ease;
+}
+.update-icon { width: 44px; height: 44px; flex: none; border-radius: 14px; background: rgba(45, 212, 191, 0.14); color: var(--pos); display: flex; align-items: center; justify-content: center; }
+.update-title { font-family: var(--display); font-size: 20px; font-weight: 700; }
+.update-notes { max-height: 38dvh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.update-notes ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; line-height: 1.45; color: var(--soft); }
+.update-notes li::marker { color: var(--pos); }

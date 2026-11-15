@@ -1,0 +1,21 @@
+[
+  {
+    "version": "1.1.0",
+    "date": "2026-11-15",
+    "title": "Avisos de versión nueva",
+    "items": [
+      "Cuando subamos una versión nueva, la app te avisa y la podés actualizar con un botón.",
+      "Ves aquí mismo qué trae cada versión.",
+      "La versión de la app aparece en la pestaña Familia."
+    ]
+  },
+  {
+    "version": "1.0.0",
+    "date": "2026-11-15",
+    "title": "Primera versión",
+    "items": [
+      "Gastos, préstamos y pagos entre la familia, con balances y pagos sugeridos.",
+      "Tutorial al inicio, pantalla de carga y funciona sin internet."
+    ]
+  }
+]

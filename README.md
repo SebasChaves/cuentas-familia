@@ -30,6 +30,9 @@ npm run dev
 
 Cada `git push` a `main` compila y publica en GitHub Pages con
 [`deploy.yml`](.github/workflows/deploy.yml).
+Antes de publicar algo que la familia vaya a notar, subí la versión en `package.json` y agregá
+la entrada en [`public/changelog.json`](public/changelog.json): la app muestra esas novedades en el
+aviso de "Versión nueva". Detalles en [`CLAUDE.md`](CLAUDE.md).
 
 ## Cómo se usa
 

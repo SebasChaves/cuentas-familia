@@ -1,13 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { registerSW } from 'virtual:pwa-register';
 import App from './App.jsx';
+import UpdatePrompt from './components/UpdatePrompt.jsx';
+import { initUpdates } from './update';
 import './styles.css';
 
-registerSW({ immediate: true });
+initUpdates();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
+    <UpdatePrompt />
   </StrictMode>,
 );
